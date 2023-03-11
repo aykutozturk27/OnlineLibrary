@@ -1,7 +1,7 @@
 ﻿using OnlineLibrary.Core.DataAccess.EntityFramework;
+using OnlineLibrary.Core.Entities;
 using OnlineLibrary.DataAccess.Abstract;
 using OnlineLibrary.DataAccess.Concrete.EntityFramework.Contexts;
-using OnlineLibrary.Entities.Concrete;
 
 namespace OnlineLibrary.DataAccess.Concrete.EntityFramework
 {

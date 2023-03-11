@@ -1,14 +1,14 @@
-﻿using OnlineLibrary.Entities.Concrete;
-
-namespace OnlineLibrary.Core.Entities
+﻿namespace OnlineLibrary.Core.Entities
 {
-    public class User : BaseEntity
+    public class User : IEntity
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Email { get; set; }
-        public byte[]? PasswordSalt { get; set; }
-        public byte[]? PasswordHash { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public bool Status { get; set; }
 
         public virtual ICollection<UserOperationClaim>? UserOperationClaims { get; set; }
         public virtual ICollection<UserBook>? UserBooks { get; set; }

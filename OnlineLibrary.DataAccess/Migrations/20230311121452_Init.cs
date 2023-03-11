@@ -11,13 +11,17 @@ namespace OnlineLibrary.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
             migrationBuilder.CreateTable(
                 name: "OperationClaims",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,20 +30,17 @@ namespace OnlineLibrary.DataAccess.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Users",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,20 +49,16 @@ namespace OnlineLibrary.DataAccess.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserBooks",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Amount = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", maxLength: 50, nullable: true),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", maxLength: 50, nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,6 +66,7 @@ namespace OnlineLibrary.DataAccess.Migrations
                     table.ForeignKey(
                         name: "FK_UserBooks_Users_UserId",
                         column: x => x.UserId,
+                        principalSchema: "dbo",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -76,6 +74,7 @@ namespace OnlineLibrary.DataAccess.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserOperationClaims",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -89,12 +88,14 @@ namespace OnlineLibrary.DataAccess.Migrations
                     table.ForeignKey(
                         name: "FK_UserOperationClaims_OperationClaims_OperationClaimId",
                         column: x => x.OperationClaimId,
+                        principalSchema: "dbo",
                         principalTable: "OperationClaims",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserOperationClaims_Users_UserId",
                         column: x => x.UserId,
+                        principalSchema: "dbo",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -102,16 +103,19 @@ namespace OnlineLibrary.DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserBooks_UserId",
+                schema: "dbo",
                 table: "UserBooks",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserOperationClaims_OperationClaimId",
+                schema: "dbo",
                 table: "UserOperationClaims",
                 column: "OperationClaimId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserOperationClaims_UserId",
+                schema: "dbo",
                 table: "UserOperationClaims",
                 column: "UserId");
         }
@@ -120,16 +124,20 @@ namespace OnlineLibrary.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserBooks");
+                name: "UserBooks",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "UserOperationClaims");
+                name: "UserOperationClaims",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "OperationClaims");
+                name: "OperationClaims",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Users",
+                schema: "dbo");
         }
     }
 }

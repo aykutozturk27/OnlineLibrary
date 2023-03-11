@@ -1,9 +1,8 @@
-﻿using OnlineLibrary.Core.Entities;
-
-namespace OnlineLibrary.Entities.Concrete
+﻿namespace OnlineLibrary.Core.Entities
 {
-    public class UserBook : BaseEntity
+    public class UserBook : IEntity
     {
+        public int Id { get; set; }
         public string? Name { get; set; }
         public int Amount { get; set; }
         public DateTime? BookingDate { get; set; }

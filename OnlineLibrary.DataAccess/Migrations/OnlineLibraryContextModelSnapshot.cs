@@ -32,11 +32,13 @@ namespace OnlineLibrary.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OperationClaims");
+                    b.ToTable("OperationClaims", "dbo");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Core.Entities.User", b =>
@@ -47,39 +49,80 @@ namespace OnlineLibrary.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LastName");
 
                     b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varbinary(500)")
+                        .HasColumnName("PasswordHash");
 
                     b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("varbinary(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varbinary(500)")
+                        .HasColumnName("PasswordSalt");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", "dbo");
+                });
+
+            modelBuilder.Entity("OnlineLibrary.Core.Entities.UserBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasMaxLength(50)
+                        .HasColumnType("int")
+                        .HasColumnName("Amount");
+
+                    b.Property<DateTime?>("BookingDate")
+                        .HasMaxLength(50)
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BookingDate");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasMaxLength(50)
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ReturnDate");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBooks", "dbo");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Core.Entities.UserOperationClaim", b =>
@@ -102,58 +145,24 @@ namespace OnlineLibrary.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserOperationClaims");
+                    b.ToTable("UserOperationClaims", "dbo");
                 });
 
-            modelBuilder.Entity("OnlineLibrary.Entities.Concrete.UserBook", b =>
+            modelBuilder.Entity("OnlineLibrary.Core.Entities.UserBook", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("OnlineLibrary.Core.Entities.User", "User")
+                        .WithMany("UserBooks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("BookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserBooks");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Core.Entities.UserOperationClaim", b =>
                 {
                     b.HasOne("OnlineLibrary.Core.Entities.OperationClaim", "OperationClaim")
-                        .WithMany()
+                        .WithMany("UserOperationClaims")
                         .HasForeignKey("OperationClaimId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -169,15 +178,9 @@ namespace OnlineLibrary.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OnlineLibrary.Entities.Concrete.UserBook", b =>
+            modelBuilder.Entity("OnlineLibrary.Core.Entities.OperationClaim", b =>
                 {
-                    b.HasOne("OnlineLibrary.Core.Entities.User", "User")
-                        .WithMany("UserBooks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("UserOperationClaims");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Core.Entities.User", b =>

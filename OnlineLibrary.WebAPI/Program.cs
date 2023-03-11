@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineLibrary.Business.DependencyResolvers.Autofac;
+using OnlineLibrary.Core.DependencyResolvers;
+using OnlineLibrary.Core.Extensions;
+using OnlineLibrary.Core.Utilities.IoC;
 using OnlineLibrary.Core.Utilities.Security.Encryption;
 using OnlineLibrary.Core.Utilities.Security.JWT;
 
@@ -25,6 +28,8 @@ namespace OnlineLibrary.WebAPI
             });
 
             builder.Services.AddControllers();
+
+            builder.Services.AddCors();
 
             var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -63,6 +68,10 @@ namespace OnlineLibrary.WebAPI
                         new string[] { }
                     }
                 });
+            });
+
+            builder.Services.AddDependencyResolvers(new ICoreModule[] {
+               new CoreModule()
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

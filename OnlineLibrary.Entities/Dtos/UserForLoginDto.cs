@@ -1,9 +1,10 @@
-﻿namespace OnlineLibrary.Entities.Dtos
+﻿using OnlineLibrary.Core.Entities;
+
+namespace OnlineLibrary.Entities.Dtos
 {
-    public class UserForLoginDto
+    public class UserForLoginDto : IDto
     {
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? AuthenticatorCode { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

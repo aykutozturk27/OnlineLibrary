@@ -1,5 +1,5 @@
 ﻿using OnlineLibrary.Core.DataAccess;
-using OnlineLibrary.Entities.Concrete;
+using OnlineLibrary.Core.Entities;
 
 namespace OnlineLibrary.DataAccess.Abstract
 {

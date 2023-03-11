@@ -8,5 +8,7 @@
         public static string LoginSuccessful = "Başarılı giriş";
         public static string UserAlreadyExist = "Kullanıcı mevcut";
         public static string TokenCreated = "Token oluşturuldu";
+        public static string AuthorizationDenied = "Yetkiniz yok!";
+        public static string UserBookAdded = "Kullanıcı kitabı eklendi!";
     }
 }

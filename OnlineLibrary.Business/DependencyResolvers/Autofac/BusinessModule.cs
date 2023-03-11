@@ -1,6 +1,10 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
+using Microsoft.AspNetCore.Http;
 using OnlineLibrary.Business.Abstract;
 using OnlineLibrary.Business.Concrete.Managers;
+using OnlineLibrary.Core.Utilities.Interceptors;
 using OnlineLibrary.Core.Utilities.Security.JWT;
 using OnlineLibrary.DataAccess.Abstract;
 using OnlineLibrary.DataAccess.Concrete.EntityFramework;
@@ -19,6 +23,16 @@ namespace OnlineLibrary.Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
+            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
+
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
+                .EnableInterfaceInterceptors(new ProxyGenerationOptions()
+                {
+                    Selector = new AspectInterceptorSelector()
+                }).SingleInstance();
         }
     }
 }
