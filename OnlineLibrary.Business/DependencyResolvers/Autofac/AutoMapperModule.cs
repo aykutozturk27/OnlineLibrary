@@ -16,6 +16,7 @@ namespace OnlineLibrary.Business.DependencyResolvers.Autofac
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new UserProfile());
+                cfg.AddProfile(new UserBookProfile());
             });
 
             return config;

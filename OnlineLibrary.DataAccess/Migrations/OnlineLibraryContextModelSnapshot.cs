@@ -96,24 +96,26 @@ namespace OnlineLibrary.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
-                        .HasMaxLength(50)
                         .HasColumnType("int")
                         .HasColumnName("Amount");
 
-                    b.Property<DateTime?>("BookingDate")
-                        .HasMaxLength(50)
-                        .HasColumnType("datetime2")
-                        .HasColumnName("BookingDate");
-
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Name");
 
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasMaxLength(50)
+                    b.Property<DateTime>("ReservedDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ReturnDate");
+                        .HasColumnName("ReservedDate");
+
+                    b.Property<DateTime?>("ReturnedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ReturnedDate");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int")
+                        .HasColumnName("Stock");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

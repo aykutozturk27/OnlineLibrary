@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Business.Abstract;
-using OnlineLibrary.Core.Entities;
+using OnlineLibrary.Entities.Dtos;
 
 namespace OnlineLibrary.WebAPI.Controllers
 {
@@ -15,7 +15,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             _userBookService = userBookService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet("GetAll")]
         public ActionResult GetAll()
         {
             var result = _userBookService.GetAll();
@@ -26,10 +26,32 @@ namespace OnlineLibrary.WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
-        public ActionResult Add(UserBook userBook)
+        [HttpPost("Add")]
+        public ActionResult Add(UserBookAddDto userBookAddDto)
         {
-            var result = _userBookService.Add(userBook);
+            var result = _userBookService.Add(userBookAddDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetReservationBookList")]
+        public ActionResult GetReservationBookList()
+        {
+            var result = _userBookService.GetReservationBookList();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetReturnedBookList")]
+        public ActionResult GetReturnedBookList()
+        {
+            var result = _userBookService.GetReturnedBookList();
             if (result.Success)
             {
                 return Ok(result);
