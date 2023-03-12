@@ -9,10 +9,12 @@ namespace OnlineLibrary.WebAPI.Controllers
     public class UserBooksController : ControllerBase
     {
         private readonly IUserBookService _userBookService;
+        private readonly ILogger<UserBooksController> _logger;
 
-        public UserBooksController(IUserBookService userBookService)
+        public UserBooksController(IUserBookService userBookService, ILogger<UserBooksController> logger)
         {
             _userBookService = userBookService;
+            _logger = logger;
         }
 
         [HttpGet("GetAll")]
@@ -21,8 +23,10 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _userBookService.GetAll();
             if (result.Success)
             {
+                _logger.LogInformation("Kullanıcı kitapları listelendi");
                 return Ok(result);
             }
+            _logger.LogError("Kullanıcı kitapları listelenemedi");
             return BadRequest(result);
         }
 
@@ -32,8 +36,10 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _userBookService.Add(userBookAddDto);
             if (result.Success)
             {
+                _logger.LogInformation("{0} adlı kitap eklendi." + userBookAddDto.Name);
                 return Ok(result);
             }
+            _logger.LogError("Kitap eklenemedi");
             return BadRequest(result);
         }
 
@@ -43,6 +49,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _userBookService.GetReservationBookList();
             if (result.Success)
             {
+                _logger.LogInformation("Reserve edilen kitaplar listelendi");
                 return Ok(result);
             }
             return BadRequest(result);
@@ -54,8 +61,10 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _userBookService.GetReturnedBookList();
             if (result.Success)
             {
+                _logger.LogInformation("İade edilen kitaplar listelendi");
                 return Ok(result);
             }
+            _logger.LogError("İade edilen kitaplar listelenemedi");
             return BadRequest(result);
         }
     }

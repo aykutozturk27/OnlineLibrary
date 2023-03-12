@@ -27,6 +27,8 @@ namespace OnlineLibrary.WebAPI
                 builder.RegisterModule(new AutoMapperModule());
             });
 
+            builder.Logging.AddConsole();
+
             builder.Services.AddControllers();
 
             builder.Services.AddCors();

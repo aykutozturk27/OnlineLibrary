@@ -8,11 +8,13 @@ namespace OnlineLibrary.WebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthService _authService;
+        private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("Login")]
@@ -21,15 +23,18 @@ namespace OnlineLibrary.WebAPI.Controllers
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
+                _logger.LogError("{0} adlı kullanıcı bulunamadı" + userForLoginDto.FirstName);
                 return BadRequest(userToLogin.Message);
             }
 
             var result = _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
+                _logger.LogInformation("{0} adlı kullanıcı giriş yaptı" + userForLoginDto.FirstName);
                 return Ok(result.Data);
             }
 
+            _logger.LogError("Kullanıcı giriş işlemi başarısız");
             return BadRequest(result.Message);
         }
 
@@ -39,6 +44,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             var userExists = _authService.UserExists(userForRegisterDto.Email);
             if (!userExists.Success)
             {
+                _logger.LogError("{0} adlı kullanıcı zaten var" + userForRegisterDto.FirstName);
                 return BadRequest(userExists.Message);
             }
 
@@ -46,9 +52,11 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
             {
+                _logger.LogInformation("{0} adlı kullanıcı kayıt oldu" + userForRegisterDto.FirstName);
                 return Ok(result.Data);
             }
 
+            _logger.LogError("Kullanıcı kayıt işlemi başarısız");
             return BadRequest(result.Message);
         }
     }
