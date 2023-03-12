@@ -36,7 +36,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _userBookService.Add(userBookAddDto);
             if (result.Success)
             {
-                _logger.LogInformation("{0} adlı kitap eklendi." + userBookAddDto.Name);
+                _logger.LogInformation("{0} adlı kitap eklendi.", userBookAddDto.Name);
                 return Ok(result);
             }
             _logger.LogError("Kitap eklenemedi");
@@ -52,6 +52,7 @@ namespace OnlineLibrary.WebAPI.Controllers
                 _logger.LogInformation("Reserve edilen kitaplar listelendi");
                 return Ok(result);
             }
+            _logger.LogError("Reserve edilen kitaplar listelenemedi");
             return BadRequest(result);
         }
 

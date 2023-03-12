@@ -23,14 +23,14 @@ namespace OnlineLibrary.WebAPI.Controllers
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
-                _logger.LogError("{0} adlı kullanıcı bulunamadı" + userForLoginDto.FirstName);
+                _logger.LogError("{0} adlı kullanıcı bulunamadı", userForLoginDto.FirstName);
                 return BadRequest(userToLogin.Message);
             }
 
             var result = _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
-                _logger.LogInformation("{0} adlı kullanıcı giriş yaptı" + userForLoginDto.FirstName);
+                _logger.LogInformation("{0} adlı kullanıcı giriş yaptı", userForLoginDto.FirstName);
                 return Ok(result.Data);
             }
 
@@ -44,7 +44,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             var userExists = _authService.UserExists(userForRegisterDto.Email);
             if (!userExists.Success)
             {
-                _logger.LogError("{0} adlı kullanıcı zaten var" + userForRegisterDto.FirstName);
+                _logger.LogError("{0} adlı kullanıcı zaten var", userForRegisterDto.FirstName);
                 return BadRequest(userExists.Message);
             }
 
@@ -52,7 +52,7 @@ namespace OnlineLibrary.WebAPI.Controllers
             var result = _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
             {
-                _logger.LogInformation("{0} adlı kullanıcı kayıt oldu" + userForRegisterDto.FirstName);
+                _logger.LogInformation("{0} adlı kullanıcı kayıt oldu", userForRegisterDto.FirstName);
                 return Ok(result.Data);
             }
 
